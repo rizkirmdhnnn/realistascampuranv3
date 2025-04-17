@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Aplikasi Pemrosesan Citra Digital Sederhana Part 2</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 CSS and JS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .channel-canvas {
+            border: 1px solid #374151;
+            margin: 10px;
+        }
+        
+        /* SweetAlert2 dark theme customizations */
+        .dark .swal2-popup {
+            background-color: #1f2937 !important;
+            color: #f3f4f6 !important;
+        }
+        
+        .dark .swal2-title, 
+        .dark .swal2-html-container {
+            color: #f3f4f6 !important;
+        }
+        
+        .dark .swal2-confirm {
+            background-color: #0f766e !important;
+        }
+        
+        .dark .swal2-cancel {
+            background-color: #4b5563 !important;
+        }
+        
+        /* Light theme for SweetAlert2 */
+        html:not(.dark) .swal2-popup {
+            background-color: #ffffff !important;
+            color: #111827 !important;
+        }
+        
+        html:not(.dark) .swal2-title, 
+        html:not(.dark) .swal2-html-container {
+            color: #111827 !important;
+        }
+        
+        html:not(.dark) .swal2-confirm {
+            background-color: #0d9488 !important;
+        }
+        
+        html:not(.dark) .swal2-cancel {
+            background-color: #9ca3af !important;
+        }
+        
+        /* Transition effects */
+        body, div, button, select, input, canvas {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 dark:bg-gray-900 bg-gray-100 text-gray-900 dark:text-gray-100 min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-primary-100">Aplikasi Pemrosesan Citra Digital Part 2</h1>
+        
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+            <label class="inline-block mb-2 text-sm font-medium">
+                <span class="block mb-2">Upload Gambar:</span>
+                <input type="file" id="upload" accept="image/*" 
+                       class="block w-full text-gray-700 dark:text-gray-400 file:mr-4 file:py-2 file:px-4
+                       file:rounded-md file:border-0 file:text-sm file:font-medium
+                       file:bg-gray-200 dark:file:bg-primary-800 file:text-gray-700 dark:file:text-primary-100 
+                       hover:file:bg-gray-300 dark:hover:file:bg-primary-700">
+            </label>
+            
+            <div class="mt-4 flex flex-wrap gap-4 items-center">
+                <label for="operation" class="text-sm font-medium">Pilih operasi:</label>
+                <select id="operation" 
+                        class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white 
+                        rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2">
+                    <!-- Filter operations -->
+                    <option disabled>── Filter ──</option>
+                    <option value="grayscale">Ubah warna RGB - Grayscale</option>
+                    <option value="edgeRight">Deteksi garis kanan</option>
+                    <option value="edgeTop">Deteksi garis atas</option>
+                    <option value="blur">Blur</option>
+                    <option value="separate">Pisahkan Kanal RGB</option>
+                    
+                    <!-- Transform operations -->
+                    <option disabled>── Transformasi ──</option>
+                    <option value="translate">Translasi (geser)</option>
+                    <option value="scale">Skala</option>
+                    <option value="rotate">Rotasi</option>
+                    <option value="flipH">Balik horizontal</option>
+                    <option value="flipV">Balik vertikal</option>
+                </select>
+                <button id="process" 
+                        class="px-4 py-2 bg-primary-600 dark:bg-primary-700 text-white rounded-md hover:bg-primary-500 
+                        dark:hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-opacity-50 transition-colors">
+                    Proses
+                </button>
+                <button id="download" 
+                        class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 
+                        dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition-colors">
+                    Download
+                </button>
+            </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+            <canvas id="canvas" class="border border-gray-300 dark:border-gray-600 rounded-lg max-w-full"></canvas>
+            <!-- Kontainer untuk hasil channel terpisah -->
+            <div id="channels" class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        </div>
+    </div>
+
+    <script src="apps.js"></script>
+</body>
+</html>
